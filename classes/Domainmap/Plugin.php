@@ -265,54 +265,6 @@ class Domainmap_Plugin {
 	}
 
 	/**
-	 * Returns array of resellers.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access public
-	 * @return array The array of resellers.
-	 */
-	public function get_resellers() {
-		if ( is_null( $this->_resellers ) ) {
-			$this->_resellers = array();
-            /**
-             * Filter domain mapping resellers
-             *
-             * @since 4.0.0
-             * @param array $resellers
-             */
-            $resellers = apply_filters( 'domainmapping_resellers', array() );
-			foreach ( $resellers as $reseller ) {
-				if ( is_object( $reseller ) && is_a( $reseller, 'Domainmap_Reseller' ) ) {
-					$this->_resellers[Domainmap_Reseller::encode_reseller_class( get_class( $reseller ) )] = $reseller;
-				}
-			}
-		}
-
-		return $this->_resellers;
-	}
-
-	/**
-	 * Returns active reseller instance.
-	 *
-	 * @since 4.0.0
-	 *
-	 * @access public
-	 * @return Domainmap_Reseller The reseller instance or NULL.
-	 */
-	public function get_reseller() {
-		$options = $this->get_options();
-		if ( empty( $options['map_reseller'] ) ) {
-			return null;
-		}
-
-		$resellers = $this->get_resellers();
-		return is_string( $options['map_reseller'] ) && array_key_exists( $options['map_reseller'], $resellers )
-			? $resellers[$options['map_reseller']]
-			: null;
-	}
-
-	/**
 	 * Returns the associated array of country codes and country names.
 	 *
 	 * @since 4.0.0
