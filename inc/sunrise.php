@@ -10,9 +10,6 @@ function domainmapping_is_dm_active(){
     return is_array($dmmd_active_plugins) ? in_array("brainys-domain-mapping/domain-mapping.php", array_keys($dmmd_active_plugins)) : false;
 }
 
-var_dump(domainmapping_is_dm_active());
-
-
 if( !domainmapping_is_dm_active() ) return;
 
 define( 'DOMAINMAPPING_SUNRISE_VERSION', '1.0.3.1' );
