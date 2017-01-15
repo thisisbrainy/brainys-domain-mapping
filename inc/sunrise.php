@@ -7,7 +7,7 @@ function domainmapping_is_dm_active(){
         wp_cache_set("dm_active_plugins", $dmmd_active_plugins);
     }
 
-    return is_array($dmmd_active_plugins) ? in_array("domain-mapping/domain-mapping.php", array_keys($dmmd_active_plugins)) : false;
+    return is_array($dmmd_active_plugins) ? in_array("brainys-domain-mapping/domain-mapping.php", array_keys($dmmd_active_plugins)) : false;
 }
 
 
