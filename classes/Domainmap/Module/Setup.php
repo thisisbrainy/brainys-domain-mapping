@@ -122,20 +122,4 @@ class Domainmap_Module_Setup extends Domainmap_Module {
 		wp_register_style( 'domainmapping-admin', $baseurl . 'css/admin.css', array( 'google-font-lato', 'buttons' ), Domainmap_Plugin::VERSION );
 	}
 
-	/**
-	 * Setups resellers.
-	 *
-	 * @since 4.0.0
-	 * @filter domainmapping_resellers
-	 *
-	 * @access public
-	 * @param array $resellers The array of resellers.
-	 * @return array Updated array of resellers.
-	 */
-	public function setup_resellers( $resellers ) {
-		$resellers[] = new Domainmap_Reseller_Enom();
-		$resellers[] = new Domainmap_Reseller_WHMCS();
-		return $resellers;
-	}
-
 }
