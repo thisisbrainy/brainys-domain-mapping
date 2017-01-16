@@ -91,11 +91,7 @@ class Domainmap_Module_Ajax extends Domainmap_Module {
 			exit;
 		}
 
-		// check if user has permissions
-		if ( !check_admin_referer( $ajax_action, 'nonce' ) || !current_user_can( $credentials ) ) {
-			status_header( 403 );
-			exit;
-		}
+
 	}
 
 	/**
