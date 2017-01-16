@@ -85,12 +85,6 @@ class Domainmap_Module_Ajax extends Domainmap_Module {
 	 * @param string $credentials The capabilities, which an user has to have.
 	 */
 	protected static function _check_premissions( $ajax_action, $credentials = 'manage_options' ) {
-		// check if request has been made via jQuery
-		if ( empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) || strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) != 'xmlhttprequest' ) {
-			status_header( 404 );
-			exit;
-		}
-
 
 	}
 
