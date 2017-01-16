@@ -1,4 +1,5 @@
 <?php
+
 /*
 Plugin Name: Brainy's Domain Mapping
 Plugin URI: https://github.com/thisisbrainy/brainys-domain-mapping
@@ -9,69 +10,57 @@ Author URI: https://brainy.blog
 Network: true
 */
 
-// +----------------------------------------------------------------------+
-// | Copyright Incsub (http://incsub.com/)                                |
-// | Based on an original by Donncha (http://ocaoimh.ie/)                 |
-// +----------------------------------------------------------------------+
-// | This program is free software; you can redistribute it and/or modify |
-// | it under the terms of the GNU General Public License, version 2, as  |
-// | published by the Free Software Foundation.                           |
-// |                                                                      |
-// | This program is distributed in the hope that it will be useful,      |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
-// | GNU General Public License for more details.                         |
-// |                                                                      |
-// | You should have received a copy of the GNU General Public License    |
-// | along with this program; if not, write to the Free Software          |
-// | Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,               |
-// | MA 02110-1301 USA                                                    |
-// +----------------------------------------------------------------------+
+/* Prevent non-multisite usage or reloading the plugin, if it has already been load_text_domain */
+if(!is_multisite() || class_exists('Domainmap_Plugin', false)) {
 
-// prevent non multisite usage or reloading the plugin, if it has been already loaded
-if ( !is_multisite() || class_exists( 'Domainmap_Plugin', false ) ) {
-   return;
+  return;
+
 }
 
-// UnComment the line below to allow multiple domain mappings per blog
-//define('DOMAINMAPPING_ALLOWMULTI', true);
-
-// main domain mapping class
-require_once 'inc/DM_Currencies.php';
+/* Require main classes */
+require_once 'inc/DM_Currencies.php'; // todo remove
 require_once 'classes/class.domainmap.php';
 
-/**
- * Automatically loads classes for the plugin. Checks a namespace and loads only
- * approved classes.
- *
- * @since 4.0.0
- *
- * @param string $class The class name to autoload.
- * @return boolean Returns TRUE if the class is located. Otherwise FALSE.
- */
-function domainmap_autoloader( $class ) {
-	$basedir = dirname( __FILE__ );
-	$namespaces = array( 'Domainmap', "Vendor" );
-	foreach ( $namespaces as $namespace ) {
-		if ( substr( $class, 0, strlen( $namespace ) ) == $namespace ) {
+/* Autoload classes */
+function domainmap_autoloader($class) {
 
-			$filename = $basedir . str_replace( '_', DIRECTORY_SEPARATOR, "_classes_{$class}.php" );
-			if ( is_readable( $filename ) ) {
-				require $filename;
-				return true;
-			}
-		}
+  $basedir = dirname(__FILE__);
+  $namespaces = ['Domainmap', 'Vendor'];
 
-        if( $namespace === "Vendor" ){
-            $filename = $basedir . str_replace( '_', DIRECTORY_SEPARATOR, "_classes_Vendor_{$class}.php" );
-            if ( is_readable( $filename ) ) {
-                require $filename;
-                return true;
-            }
-        }
-	}
+  foreach($namespaces as $namespace) {
 
-	return false;
+    if(substr($class, 0, strlen($namespace)) == $namespace) {
+
+      $filename = $basedir . str_replace('_', DIRECTORY_SEPARATOR, '_classes_' . $class . '.php');
+
+      if(is_readable($filename)) {
+
+        require $filename;
+
+        return true;
+
+      }
+
+    }
+
+    if($namespace === 'Vendor') {
+
+      $filename = $basedir . str_replace('_', DIRECTORY_SEPARATOR, '_classes_Vendor_' . $class . '.php');
+
+      if(is_readable($filename)) {
+
+        require $filename;
+
+        return true;
+
+      }
+
+    }
+
+  }
+
+  return false;
+
 }
 
 /**
@@ -88,20 +77,6 @@ function domainmap_setup_constants() {
 	define( 'DOMAINMAP_BASEFILE', __FILE__ );
 	define( 'DOMAINMAP_ABSURL',   plugins_url( '/', __FILE__ ) );
 	define( 'DOMAINMAP_ABSPATH',  dirname( __FILE__ ) );
-
-/**
- * @deprecate DM_FORCE_PROTOCOL_ON_MAPPED_DOMAIN
- */
-//	if ( !defined( 'DM_FORCE_PROTOCOL_ON_MAPPED_DOMAIN' ) ) {
-//		define( 'DM_FORCE_PROTOCOL_ON_MAPPED_DOMAIN', false );
-//	}
-
-/**
- * @deprecate DOMAINMAPPING_ALLOWMULTI
- */
-//	if ( !defined( 'DOMAINMAPPING_ALLOWMULTI' ) ) {
-//		define( 'DOMAINMAPPING_ALLOWMULTI', false );
-//	}
 
 	// setup db tables
 	$prefix = isset( $wpdb->base_prefix ) ? $wpdb->base_prefix : $wpdb->prefix;
@@ -181,42 +156,16 @@ function domainmap_plugin_deactivate() {
 register_deactivation_hook( __FILE__, 'domainmap_plugin_deactivate' );
 /*================== Global Functions =======================*/
 
-/**
- * Retrieves respective site url with original domain for current site checking weather it's an ssl connection
- *
- * Returns the 'site_url' option or unswapped site url if it's and ssl connection with the appropriate protocol, 'https' if
- * is_ssl() and 'http' otherwise. If $scheme is 'http' or 'https', is_ssl() is
- * overridden.
- *
- * @since 4.1.3
- *
- * @uses site_url()
- *
- * @param string $path Optional. Path relative to the site url.
- * @param string $scheme Optional. Scheme to give the site url context. See set_url_scheme().
- * @return string Site url link with optional path appended.
- */
-function dm_site_url( $path = '', $scheme = null ){
-    $current_site_url = site_url( $path, $scheme );
-    return domain_map::utils()->unswap_url( $current_site_url, false, (bool) $path );
+/* Retrieves respective site url with original domain for current site checking */
+function dm_site_url($path = '', $scheme = null) {
+
+  return domain_map::utils()->unswap_url(site_url($path, $scheme), false, (bool) $path);
+
 }
 
-/**
- * Retrieves respective home url with original domain for current site checking weather it's an ssl connection
- *
- * Returns the 'home' option or unswapped home url if it's and ssl connection with the appropriate protocol, 'https' if
- * is_ssl() and 'http' otherwise. If $scheme is 'http' or 'https', is_ssl() is
- * overridden.
- *
- * @since 4.1.3
- *
- * @uses home_url()
- *
- * @param string $path Optional. Path relative to the site url.
- * @param string $scheme Optional. Scheme to give the site url context. See set_url_scheme().
- * @return string Site url link with optional path appended.
- */
-function dm_home_url( $path = '', $scheme = null ){
-    $current_home_url = home_url( $path, $scheme );
-    return domain_map::utils()->unswap_url( $current_home_url, false, (bool) $path );
-} 
+/* Retrieves respective home url with original domain for current site checking */
+function dm_home_url($path = '', $scheme = null) {
+
+  return domain_map::utils()->unswap_url(home_url($path, $scheme), false, (bool) $path);
+
+}
