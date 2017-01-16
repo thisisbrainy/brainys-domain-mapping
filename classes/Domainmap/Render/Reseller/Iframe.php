@@ -20,54 +20,35 @@
 // +----------------------------------------------------------------------+
 
 /**
- * Main class for mapped domains tab.
+ * Base template class for resellers IFrame forms.
  *
+ * @abstract
+ * @since 4.0.0
  * @category Domainmap
  * @package Render
- * @subpackage MappedDomains
- *
- * @since 4.2.0
+ * @subpackage Reseller
  */
-class Domainmap_Render_Network_MappedDomains extends Domainmap_Render_Network {
+abstract class Domainmap_Render_Reseller_Iframe extends Domainmap_Render {
 
-    /**
-     * @var $table Domainmap_Table
-     */
-    public $table = "";
+	/**
+	 * Renders template.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @access protected
+	 */
+	protected function _to_html() {
+	     $this->_render_page();
+	}
 
-    /**
-     * Renders tab content.
-     *
-     * @since 4.2.0
-     *
-     * @access protected
-     */
-    protected function _render_tab() {
-        $this->table->prepare_items();
-        ?>
-        <div id="domainmapping-mapped-domains-table">
-        <?php
-        $this->table->views();
-        $this->table->search_box(__('Search mapped domains', domain_map::Text_Domain), "mapped_domain");
-        $this->table->display();
-        ?>
-        </div>
-        <?php
-    }
+	/**
+	 * Render template content.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @abstract
+	 * @access protected
+	 */
+	protected abstract function _render_page();
 
-    /**
-     * Renders template.
-     *
-     * @since 4.2.0
-     *
-     * @access protected
-     */
-    protected function _to_html() {
-        ?><form action="" method="post">
-        <?php if ( $this->_nonce_action ) : ?>
-            <?php wp_nonce_field( $this->_nonce_action ) ?>
-        <?php endif; ?>
-        <?php parent::_to_html() ?>
-        </form><?php
-    }
 }

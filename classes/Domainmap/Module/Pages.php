@@ -102,7 +102,12 @@ class Domainmap_Module_Pages extends Domainmap_Module {
 	 */
 	public function render_site_options_page() {
 		global $blog_id;
+		$reseller = $this->_plugin->get_reseller();
 		$tabs = array( 'mapping' => __( 'Map domain', 'domainmap' ) );
+
+		if ( $reseller && $reseller->is_valid() && count( $reseller->get_tld_list() ) ) {
+			$tabs['purchase'] = __( 'Purchase domain', 'domainmap' );
+		}
 
 		$activetab = strtolower( trim( filter_input( INPUT_GET, 'tab', FILTER_DEFAULT ) ) );
 		if ( !in_array( $activetab, array_keys( $tabs ) ) ) {
@@ -372,8 +377,15 @@ class Domainmap_Module_Pages extends Domainmap_Module {
 
 		$tabs = array(
 			'general-options'  => __( 'Mapping options', 'domainmap' ),
-      'mapped-domains' => __( 'Mapped Domains', 'domainmap' ),
+			'reseller-options' => __( 'Reseller options', 'domainmap' ),
+//			'reseller-api-log' => __( 'API Log', 'domainmap' ),
+            'mapped-domains' => __( 'Mapped Domains', 'domainmap' ),
 		);
+
+		$reseller = $this->_plugin->get_reseller();
+		if ( isset( $options['map_reseller_log'] ) && $options['map_reseller_log'] && !is_null( $reseller ) ) {
+			$tabs['reseller-api-log'] = __( 'Reseller API log', 'domainmap' );
+		}
 
 		$activetab = strtolower( trim( filter_input( INPUT_GET, 'tab', FILTER_DEFAULT ) ) );
 		if ( !in_array( $activetab, array_keys( $tabs ) ) ) {
@@ -391,6 +403,20 @@ class Domainmap_Module_Pages extends Domainmap_Module {
 				$page = new Domainmap_Render_Network_Options( $tabs, $activetab, $nonce_action, $options );
 				// fetch unchanged domain name from database, because get_option function could return mapped domain name
 				$page->basedomain = $this->_wpdb->get_var( "SELECT option_value FROM {$this->_wpdb->options} WHERE option_name = 'siteurl'" );
+				break;
+			case 'reseller-options':
+				$page = new Domainmap_Render_Network_Resellers( $tabs, $activetab, $nonce_action, $options );
+				$page->resellers = $this->_plugin->get_resellers();
+				break;
+			case 'reseller-api-log':
+				$page = new Domainmap_Render_Network_Log( $tabs, $activetab, $nonce_action, $options );
+				$page->table = new Domainmap_Table_Reseller_Log( array(
+					'reseller'     => $reseller->get_reseller_id(),
+					'nonce_action' => $nonce_action,
+					'actions'      => array(
+						'reseller-log-delete' => __( 'Delete', 'domainmap' ),
+					),
+				) );
 				break;
             case 'mapped-domains':
                 $page = new Domainmap_Render_Network_MappedDomains( $tabs, $activetab, $nonce_action, $options );

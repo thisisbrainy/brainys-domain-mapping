@@ -178,7 +178,6 @@ class Domainmap_Render_Network_Options extends Domainmap_Render_Network {
 
 		?><h4 class="domainmapping-block-header"><?php _e( 'Domain mapping configuration', 'domainmap' ) ?></h4>
 		<p>
-			We recommend using a service like <a href="https://cloudflare.com">CloudFlare</a> to manage your domain name because CloudFlare provides free SSL for your website and thus makes it secure. 
 			<?php _e( "Enter the IP address users need to point their DNS A records at. If you don't know what it is, ping this site to get the IP address.", 'domainmap' ) ?>
 			<?php _e( "If you have more than one IP address, separate them with a comma. This message is displayed on the Domain mapping page for your users.", 'domainmap' ) ?>
 		</p>
