@@ -102,12 +102,7 @@ class Domainmap_Module_Pages extends Domainmap_Module {
 	 */
 	public function render_site_options_page() {
 		global $blog_id;
-		$reseller = $this->_plugin->get_reseller();
 		$tabs = array( 'mapping' => __( 'Map domain', 'domainmap' ) );
-
-		if ( $reseller && $reseller->is_valid() && count( $reseller->get_tld_list() ) ) {
-			$tabs['purchase'] = __( 'Purchase domain', 'domainmap' );
-		}
 
 		$activetab = strtolower( trim( filter_input( INPUT_GET, 'tab', FILTER_DEFAULT ) ) );
 		if ( !in_array( $activetab, array_keys( $tabs ) ) ) {
