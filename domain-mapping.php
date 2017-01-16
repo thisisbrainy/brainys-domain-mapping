@@ -10,15 +10,14 @@ Author URI: https://brainy.blog
 Network: true
 */
 
-/* Prevent non-multisite usage or reloading the plugin, if it has already been load_text_domain */
+/* Prevent non-multisite usage or reloading the plugin, if it has already been load_text_domain
 if(!is_multisite() || class_exists('Domainmap_Plugin', false)) {
 
   return;
 
-}
+}*/
 
 /* Require main classes */
-require_once 'inc/DM_Currencies.php'; // todo remove
 require_once 'classes/class.domainmap.php';
 
 /* Autoload classes */
