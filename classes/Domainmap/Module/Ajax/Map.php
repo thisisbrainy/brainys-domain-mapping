@@ -252,7 +252,7 @@ class Domainmap_Module_Ajax_Map extends Domainmap_Module_Ajax {
 	 */
 	public function unmap_domain() {
 		global $blog_id;
-		self::_check_premissions( Domainmap_Plugin::ACTION_UNMAP_DOMAIN );
+		//self::_check_premissions( Domainmap_Plugin::ACTION_UNMAP_DOMAIN );
 
 		$show_form = false;
 		$domain = strtolower( trim( filter_input( INPUT_GET, 'domain' ) ) );
