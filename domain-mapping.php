@@ -219,4 +219,4 @@ function dm_site_url( $path = '', $scheme = null ){
 function dm_home_url( $path = '', $scheme = null ){
     $current_home_url = home_url( $path, $scheme );
     return domain_map::utils()->unswap_url( $current_home_url, false, (bool) $path );
-}
+} 
