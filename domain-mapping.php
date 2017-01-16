@@ -10,12 +10,12 @@ Author URI: https://brainy.blog
 Network: true
 */
 
-/* Prevent non-multisite usage or reloading the plugin, if it has already been load_text_domain
+/* Prevent non-multisite usage or reloading the plugin, if it has already been load_text_domain */
 if(!is_multisite() || class_exists('Domainmap_Plugin', false)) {
 
   return;
 
-}*/
+}
 
 /* Require main classes */
 require_once 'classes/class.domainmap.php';
@@ -85,7 +85,6 @@ function domainmap_setup_constants() {
 	// MultiDB compatibility, register global tables
 	if ( defined( 'MULTI_DB_VERSION' ) && function_exists( 'add_global_table' ) ) {
 		add_global_table( 'domain_mapping' );
-		add_global_table( 'domain_mapping_reseller_log' );
 	}
 }
 
